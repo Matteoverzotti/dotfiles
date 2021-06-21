@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/matteoverz/.config/nvim/modules'
+let g:netrw_dirhist_3='/home/matteoverz/Documents/Info Clasa a 9a/Codeforces/Problems/Pyra, Pyra, Pyraminx! 102968J'
+let g:netrw_dirhist_2='/home/matteoverz/.config/nvim/modules'
+let g:netrw_dirhist_1='/home/matteoverz/.config'
