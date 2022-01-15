@@ -13,6 +13,7 @@ set splitright
 
 syntax on
 colorscheme onedark
+"set termguicolors
 
 set cursorline
 set mouse=a
