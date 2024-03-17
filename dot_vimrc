@@ -1,0 +1,30 @@
+set autoindent
+set smartindent
+set tabstop=4
+set shiftwidth=4
+set nowrap
+set backspace=2
+set number
+set smarttab
+set expandtab
+set nu rnu
+set splitbelow
+set splitright
+
+syntax on
+set termguicolors
+
+"" Folding
+set foldmethod=syntax
+set nofoldenable
+set foldlevel=1000
+autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
+autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
+
+" Compile / Run
+autocmd filetype cpp nnoremap <F8> :!g++ -Wall-fsanitize=address,undefined,signed-integer-overflow -DBLAT -O2 -std=c++17 % -o bin/%:r<Enter>
+""autocmd filetype cpp nnoremap <F8> :!g++ -Wall -DBLAT -O2 -std=c++17 % -o %:r<Enter>
+
+autocmd filetype cpp nnoremap <F7> :!g++ -Wall -fsanitize=address,undefined,signed-integer-overflow -O2 -std=c++17 % grader.cpp -o bin/%:r<Enter>
+
+autocmd filetype cpp nnoremap <F9> :!bin/%:r<Enter>
