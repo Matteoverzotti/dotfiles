@@ -70,7 +70,7 @@ return {
     ["<F9>"] = {
       function()
         if vim.bo.filetype == "cpp" then
-          run_and_exit_on_keypress("./" .. vim.fn.expand("%:r"))
+          run_and_exit_on_keypress(vim.fn.expand("%:r"))
         end
       end,
       desc = "Run C++ File"
