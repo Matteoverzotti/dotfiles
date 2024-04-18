@@ -10,6 +10,7 @@ local function run_and_exit_on_keypress(command)
     relative = "editor",
     position = "50%",
     size = "80%",
+    wrap = true,
     border = {
       style = "rounded",
       text = { top = command },
@@ -61,7 +62,7 @@ return {
       function()
         if vim.bo.filetype == "cpp" then
           vim.cmd("w")
-          run_and_exit_on_keypress("g++ " .. vim.fn.expand("%") .. " -O2 -DBLAT -std=c++20 -Wall -fsanitize=address,undefined,signed-integer-overflow -o " .. vim.fn.expand("%:r"))
+          run_and_exit_on_keypress("g++ " .. vim.fn.expand("%:p") .. " -O2 -DBLAT -std=c++20 -Wall -fsanitize=address,undefined,signed-integer-overflow -o " .. vim.fn.expand("%:p:r"))
         end
       end,
       desc = "Compile C++ Code",
@@ -70,7 +71,7 @@ return {
     ["<F9>"] = {
       function()
         if vim.bo.filetype == "cpp" then
-          run_and_exit_on_keypress(vim.fn.expand("%:r"))
+          run_and_exit_on_keypress(vim.fn.expand("%:p:r"))
         end
       end,
       desc = "Run C++ File"
