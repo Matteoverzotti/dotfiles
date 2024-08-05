@@ -101,10 +101,10 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 alias vim=nvim
-alias open="nautilus"
+alias open="dolphin"
 
 alias zshconfig="nvim ~/.zshrc"
-alias ls=eza
+alias ls="eza --icons"
 alias cat=bat
 alias battery="upower -i /org/freedesktop/UPower/devices/battery_BAT0"
 alias blight="$HOME/.config/waybar/scripts/brightness.sh"
