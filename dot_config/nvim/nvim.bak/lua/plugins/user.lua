@@ -5,22 +5,6 @@
 return {
   -- == Examples of Adding Plugins ==
   {
-    "catppuccin/nvim",
-    name = "catppuccin",
-    opts = {
-      dim_inactive = { enabled = true, percentage = 0.25 },
-      highlight_overrides = {
-        mocha = function(c)
-          return {
-            Normal = { bg = c.mantle },
-            Comment = { fg = "#7687a0" },
-            ["@tag.attribute"] = { style = {} },
-          }
-        end,
-      },
-    },
-  },
-  {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     opts = {},
@@ -35,13 +19,39 @@ return {
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
     ft = { "markdown" },
     build = function() vim.fn["mkdp#util#install"]() end,
-    event = "User AstroFile"
   },
+  -- {
+  --   "RaafatTurki/corn.nvim",
+  --   event = "User AstroFile",
+  --   opts = {
+  --     auto_cmds = true,
+  --     sort_method = 'severity',
+  --     scope = 'line',
+  --     border_style = 'single',
+  --     blacklisted_modes = {},
+  --     blacklisted_severities = {},
+  --     highlights = {
+  --       error = "DiagnosticFloatingError",
+  --       warn = "DiagnosticFloatingWarn",
+  --       info = "DiagnosticFloatingInfo",
+  --       hint = "DiagnosticFloatingHint",
+  --     },
+  --     icons = {
+  --       error = "E",
+  --       warn = "W",
+  --       hint = "H",
+  --       info = "I",
+  --     },
+  --     item_preprocess_func = function(item)
+  --       return item
+  --     end,
+  --     on_toggle = function(is_hidden)
+  --       -- custom logic goes here
+  --     end,
+  --   },
+  -- },
   {
-    'RaafatTurki/corn.nvim',
-    config = function()
-      require'corn'.setup()
-    end
+    "Civitasv/cmake-tools.nvim"
   },
 
   -- == Examples of Overriding Plugins ==

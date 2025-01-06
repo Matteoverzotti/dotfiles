@@ -84,21 +84,12 @@ return {
           desc = "Pick to close",
         },
 
-        -- Compile C++ program
+        -- Compile program
         ["<F8>"] = {
           function()
             if vim.bo.filetype == "cpp" then
               vim.cmd("w")
-              vim.fn.mkdir(vim.fn.expand("%:p:h") .. "/bin", "p")
-              run_and_exit_on_keypress("g++ " .. vim.fn.expand("%:p") ..
-                " -O2 -DBLAT -std=c++20 -Wall -fsanitize=address,undefined,signed-integer-overflow -o "
-                .. vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
-            elseif vim.bo.filetype == "c" then
-              vim.cmd("w")
-              vim.fn.mkdir(vim.fn.expand("%:p:h") .. "/bin", "p")
-              run_and_exit_on_keypress("gcc " .. vim.fn.expand("%:p") ..
-                " -O2 -DBLAT -Wall -fsanitize=address,undefined,signed-integer-overflow -o "
-                .. vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
+              run_and_exit_on_keypress("g++ " .. vim.fn.expand("%:p") .. " -O2 -DBLAT -std=c++20 -Wall -fsanitize=address,undefined,signed-integer-overflow -o " .. vim.fn.expand("%:p:r"))
             end
           end,
           desc = "Compile C++ Code",
@@ -107,14 +98,10 @@ return {
         ["<F9>"] = {
           function()
             if vim.bo.filetype == "cpp" then
-              run_and_exit_on_keypress(vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
-            elseif vim.bo.filetype == "c" then
-              run_and_exit_on_keypress(vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
-            elseif vim.bo.filetype == "python" then
-              run_and_exit_on_keypress("python3 " .. vim.fn.expand("%:p"))
+              run_and_exit_on_keypress(vim.fn.expand("%:p:r"))
             end
           end,
-          desc = "Run C++ File"
+          desc = "Run Files"
         },
 
         -- tables with just a `desc` key will be registered with which-key if it's installed
