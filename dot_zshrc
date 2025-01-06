@@ -91,6 +91,11 @@ source $ZSH/oh-my-zsh.sh
 #   export EDITOR='mvim'
 # fi
 
+# Start SSH agent if not running
+if [ -z "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+fi
+
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
@@ -101,7 +106,7 @@ source $ZSH/oh-my-zsh.sh
 #
 # Example aliases
 alias vim=nvim
-alias open="dolphin"
+alias open="nautilus"
 
 alias zshconfig="nvim ~/.zshrc"
 alias ls="eza --icons"
@@ -115,8 +120,6 @@ alias blight="$HOME/.config/waybar/scripts/brightness.sh"
 eval "$(starship init zsh)"
 
 pokemon-colorscripts -r --no-title
-
-export PATH=$PATH:/home/matteoverz/.spicetify
 
 setopt autocd              # change directory just by typing its name
 #setopt correct            # auto correct mistakes
