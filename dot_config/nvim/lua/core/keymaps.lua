@@ -1,3 +1,5 @@
+require('core.popup')
+
 -- Set leader key
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
@@ -70,3 +72,35 @@ end, { desc = 'Go to next diagnostic message' })
 
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+vim.keymap.set('n', '<leader>/', 'gcc', { remap = true, desc = 'Toggle comment on line' })
+vim.keymap.set('x', '<leader>/', 'gc', { remap = true, desc = 'Toggle comment on selection' })
+
+-- Compiling programs
+vim.keymap.set('n', '<F8>', function()
+  if vim.bo.filetype == "cpp" then
+    vim.cmd("w")
+    vim.fn.mkdir(vim.fn.expand("%:p:h") .. "/bin", "p")
+    run_and_exit_on_keypress("clang++ " .. vim.fn.expand("%:p") ..
+      " -O2 -DBLAT -std=c++20 -Wall -fsanitize=address,undefined,signed-integer-overflow -o "
+      .. vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
+  elseif vim.bo.filetype == "c" then
+    vim.cmd("w")
+    vim.fn.mkdir(vim.fn.expand("%:p:h") .. "/bin", "p")
+    run_and_exit_on_keypress("gcc " .. vim.fn.expand("%:p") ..
+      " -O2 -DBLAT -Wall -fsanitize=address,undefined,signed-integer-overflow -o "
+      .. vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
+  end
+end, { desc = 'Compile Code' })
+
+
+vim.keymap.set('n', '<F9>', function ()
+  if vim.bo.filetype == "cpp" then
+    run_and_exit_on_keypress(vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
+  elseif vim.bo.filetype == "c" then
+    run_and_exit_on_keypress(vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
+  elseif vim.bo.filetype == "python" then
+    run_and_exit_on_keypress("python3 " .. vim.fn.expand("%:p"))
+  end
+end, { desc = 'Run Code' })
+
