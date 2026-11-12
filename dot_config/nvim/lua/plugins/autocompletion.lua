@@ -58,8 +58,8 @@ return { -- Autocompletion
       ['<C-k>'] = { 'select_prev', 'fallback' },
       ['<C-l>'] = { 'snippet_forward', 'fallback' },
       ['<C-h>'] = { 'snippet_backward', 'fallback' },
-      ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
-      ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+      -- ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
+      -- ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
     },
     appearance = {
       -- 'mono' for Nerd Font Mono, 'normal' for Nerd Font

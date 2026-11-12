@@ -1,0 +1,1248 @@
+# Ported from the user's Obsidian LaTeX Suite snippets.
+# Variable regexes expanded from upstream defaults (2026-11-12):
+# https://github.com/artisticat1/obsidian-latex-suite/blob/main/src/default_snippet_variables.js
+# Tab expands/jumps forward; Shift-Tab jumps backward (current key mappings).
+# Pairing is handled by nvim-autopairs. Visual wrappers are manual.
+# iint and iiint are manual so iint cannot expand before iiint is finished.
+
+global !p
+import re
+import vim
+
+def in_comment():
+    return int(vim.eval('vimtex#syntax#in_comment()')) != 0
+
+def in_math():
+    return not in_comment() and int(vim.eval('vimtex#syntax#in_mathzone()')) != 0
+
+def in_text():
+    # Also exclude text arguments nested inside math, e.g. \\text{...}.
+    return not in_comment() and not any(
+        name.startswith('texMathZone') for name in vim.eval('vimtex#syntax#stack()'))
+
+def inline_math():
+    return in_math() and any(name in ('texMathZoneLI', 'texMathZoneTI')
+                             for name in vim.eval('vimtex#syntax#stack()'))
+
+def outside_command(snip):
+    # Do not expand literal shortcuts while typing a LaTeX command name.
+    return re.search(r'\\[A-Za-z]*$', snip.before) is None
+
+def identity_matrix(size):
+    rows = [' & '.join('1' if row == col else '0' for col in range(size))
+            for row in range(size)]
+    return '\\begin{pmatrix}\n' + ' \\\\\n'.join(rows) + '\n\\end{pmatrix}'
+endglobal
+
+priority 0
+context "not in_comment()"
+snippet beg "begin{} / end{}" bA
+\begin{$1}
+	$0
+\end{$1}
+endsnippet
+
+priority 0
+context "in_text() and outside_command(snip)"
+snippet mk "Inline math" iA
+$$1$$0
+endsnippet
+
+priority 0
+context "in_text() and outside_command(snip)"
+snippet dm "Display math" bA
+\[
+	$1
+\]
+$0
+endsnippet
+
+priority 1
+context "in_text() and outside_command(snip)"
+snippet "(?<=\S)dm" "Display math after text" rA
+
+\[
+	$1
+\]
+$0
+endsnippet
+
+priority 1
+context "in_text() and outside_command(snip)"
+snippet "(?<=\S)[ \t]+dm" "Display math after text" rA
+
+\[
+	$1
+\]
+$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @a "@a" iA
+\alpha
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @b "@b" iA
+\beta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @g "@g" iA
+\gamma
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @G "@G" iA
+\Gamma
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @d "@d" iA
+\delta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @D "@D" iA
+\Delta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @e "@e" iA
+\epsilon
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet :e ":e" iA
+\varepsilon
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @z "@z" iA
+\zeta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @t "@t" iA
+\theta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @T "@T" iA
+\Theta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet :t ":t" iA
+\vartheta
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @i "@i" iA
+\iota
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @k "@k" iA
+\kappa
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @l "@l" iA
+\lambda
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @L "@L" iA
+\Lambda
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @s "@s" iA
+\sigma
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @S "@S" iA
+\Sigma
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @u "@u" iA
+\upsilon
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @U "@U" iA
+\Upsilon
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @o "@o" iA
+\omega
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet @O "@O" iA
+\Omega
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ome "ome" iA
+\omega
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet Ome "Ome" iA
+\Omega
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet text "text" iA
+\text{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet " "'" iA
+\text{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sr "sr" iA
+^{2}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet cb "cb" iA
+^{3}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet rd "rd" iA
+^{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet _ "_" iA
+_{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sts "sts" iA
+_\text{$1}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sq "sq" iA
+\sqrt{ $1 }$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet // "//" iA
+\frac{$1}{$2}$0
+endsnippet
+
+priority 10
+context "in_math() and outside_command(snip)"
+snippet "(\d+)/" "Number over denominator" rA
+\frac{`!p snip.rv = match.group(1)`}{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ee "ee" iA
+e^{ $1 }$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet invs "invs" iA
+^{-1}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "(^|[^\\])(exp|log|ln)" "Math regex" rA
+`!p snip.rv = match.group(1)``!p snip.rv = chr(92) + match.group(2)`
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet conj "conj" iA
+^{*}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet Re "Re" iA
+\mathrm{Re}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet Im "Im" iA
+\mathrm{Im}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet bf "bf" iA
+\mathbf{$1}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet rm "rm" iA
+\mathrm{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "(^|[^\\])(det)" "Math regex" rA
+`!p snip.rv = match.group(1)``!p snip.rv = chr(92) + match.group(2)`
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet trace "trace" iA
+\mathrm{Tr}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])hat" "Math regex" rA
+\hat{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])bar" "Math regex" rA
+\bar{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])dot" "Math regex" rA
+\dot{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 300
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])ddot" "Math regex" rA
+\ddot{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])tilde" "Math regex" rA
+\tilde{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])over" "Math regex" rA
+\overline{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])und" "Math regex" rA
+\underline{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])vec" "Math regex" rA
+\vec{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z]),\." "Math regex" rA
+\mathbf{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 50
+context "in_math() and outside_command(snip)"
+snippet "([a-zA-Z])\.," "Math regex" rA
+\mathbf{`!p snip.rv = match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)),\." "Math regex" rA
+\boldsymbol{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega))\.," "Math regex" rA
+\boldsymbol{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet hat "hat" iA
+\hat{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet bar "bar" iA
+\bar{$1}$0
+endsnippet
+
+priority -1
+context "in_math() and outside_command(snip)"
+snippet dot "dot" iA
+\dot{$1}$0
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet ddot "ddot" iA
+\ddot{$1}$0
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet cdot "cdot" iA
+\cdot
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet tilde "tilde" iA
+\tilde{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet over "over" iA
+\overline{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet und "und" iA
+\underline{$1}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet vec "vec" iA
+\vec{$1}$0
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet pmod "Parenthesized modulo (\pmod{n})" iA
+\pmod{${1:n}}$0
+endsnippet
+
+priority -1
+context "in_math() and outside_command(snip)"
+snippet "(\\(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|[A-Za-z])(\d)" "Math regex" rA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)`}
+endsnippet
+
+priority -1
+context "in_math() and outside_command(snip)"
+snippet "(\\(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|[A-Za-z])_{(\d+)}(\d)" "Math regex" rA
+`!p snip.rv = match.group(1)`_{`!p snip.rv = match.group(2)``!p snip.rv = match.group(3)`}
+endsnippet
+
+priority -1
+context "in_math()"
+snippet "\\((?:dot|ddot|hat|bar|tilde|vec|underline|overline|mathbf|mathcal|mathrm|mathbb))\{(\\(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|[A-Za-z])\}(\d)" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`{`!p snip.rv = match.group(2)`}_{`!p snip.rv = match.group(3)`}
+endsnippet
+
+priority -1
+context "in_math()"
+snippet "\\((?:dot|ddot|hat|bar|tilde|vec|underline|overline|mathbf|mathcal|mathrm|mathbb))\{(\\(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|[A-Za-z])\}_\{(\d+)\}(\d)" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`{`!p snip.rv = match.group(2)`}_{`!p snip.rv = match.group(3)``!p snip.rv = match.group(4)`}
+endsnippet
+
+priority -1
+context "in_math()"
+snippet "\\((?:dot|ddot|hat|bar|tilde|vec|underline|overline|mathbf|mathcal|mathrm|mathbb))\{\\((?:dot|ddot|hat|bar|tilde|vec|underline|overline|mathbf|mathcal|mathrm|mathbb))\{(\\(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|[A-Za-z])\}\}(\d)" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`{`!p snip.rv = chr(92) + match.group(2)`{`!p snip.rv = match.group(3)`}}_{`!p snip.rv = match.group(4)`}
+endsnippet
+
+priority -1
+context "in_math()"
+snippet "\\((?:dot|ddot|hat|bar|tilde|vec|underline|overline|mathbf|mathcal|mathrm|mathbb))\{\\((?:dot|ddot|hat|bar|tilde|vec|underline|overline|mathbf|mathcal|mathrm|mathbb))\{(\\(?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|[A-Za-z])\}\}_\{(\d+)\}(\d)" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`{`!p snip.rv = chr(92) + match.group(2)`{`!p snip.rv = match.group(3)`}}_{`!p snip.rv = match.group(4)``!p snip.rv = match.group(5)`}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet xnn "xnn" iA
+x_{n}
+endsnippet
+
+priority 1
+context "in_math() and outside_command(snip)"
+snippet xii "xii" iA
+x_{i}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet xjj "xjj" iA
+x_{j}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet xp1 "xp1" iA
+x_{n+1}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ynn "ynn" iA
+y_{n}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet yii "yii" iA
+y_{i}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet yjj "yjj" iA
+y_{j}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ooo "ooo" iA
+\infty
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sum "sum" iA
+\sum
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet prod "prod" iA
+\prod
+endsnippet
+
+priority 0
+context "in_math()"
+snippet \sum "\sum" i
+\sum_{${1:i}=${2:1}}^{${3:N}} $0
+endsnippet
+
+priority 0
+context "in_math()"
+snippet \prod "\prod" i
+\prod_{${1:i}=${2:1}}^{${3:N}} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet lim "lim" iA
+\lim_{ ${1:n} \to ${2:\infty} } $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet +- "+-" iA
+\pm
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet -+ "-+" iA
+\mp
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ... "..." iA
+\dots
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet nabl "nabl" iA
+\nabla
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet xx "xx" iA
+\times
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ** "**" iA
+\cdot
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet para "para" iA
+\parallel
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet === "===" iA
+\equiv
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet != "!=" iA
+\neq
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet >= ">=" iA
+\geq
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet <= "<=" iA
+\leq
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet >> ">>" iA
+\gg
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet << "<<" iA
+\ll
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet simm "simm" iA
+\sim
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sim= "sim=" iA
+\simeq
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet prop "prop" iA
+\propto
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet <-> "<->" iA
+\leftrightarrow 
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet -> "->" iA
+\to
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet !> "!>" iA
+\mapsto
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet => "=>" iA
+\implies
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet =< "=<" iA
+\impliedby
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet and "and" iA
+\cap
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet orr "orr" iA
+\cup
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet inn "inn" iA
+\in
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet notin "notin" iA
+\not\in
+endsnippet
+
+priority 0
+context "in_math()"
+snippet \\\ "\\\" iA
+\setminus
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sub= "sub=" iA
+\subseteq
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet sup= "sup=" iA
+\supseteq
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet eset "eset" iA
+\emptyset
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet set "set" iA
+\{ $1 \}$0
+endsnippet
+
+priority 1
+context "in_math() and outside_command(snip)"
+snippet exists "exists" iA
+\exists
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet qed "qed" iA
+\square
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet LL "LL" iA
+\mathcal{L}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet HH "HH" iA
+\mathcal{H}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet PP "PP" iA
+\mathcal{P}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet OO "OO" iA
+\mathcal{O}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet CC "CC" iA
+\mathbb{C}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet RR "RR" iA
+\mathbb{R}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ZZ "ZZ" iA
+\mathbb{Z}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet NN "NN" iA
+\mathbb{N}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet VV "VV" iA
+\mathbb{V}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "(^|[^\\])((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega))" "Add backslash before Greek letters" rA
+`!p snip.rv = match.group(1)``!p snip.rv = chr(92) + match.group(2)`
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "(^|[^\\])((?:parallel|perp|partial|nabla|hbar|ell|infty|oplus|ominus|otimes|oslash|square|star|dagger|vee|wedge|subseteq|subset|supseteq|supset|emptyset|exists|nexists|forall|implies|impliedby|iff|setminus|neg|lor|land|bigcup|bigcap|cdot|times|simeq|approx))" "Add backslash before symbols" rA
+`!p snip.rv = match.group(1)``!p snip.rv = chr(92) + match.group(2)`
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|(?:parallel|perp|partial|nabla|hbar|ell|infty|oplus|ominus|otimes|oslash|square|star|dagger|vee|wedge|subseteq|subset|supseteq|supset|emptyset|exists|nexists|forall|implies|impliedby|iff|setminus|neg|lor|land|bigcup|bigcap|cdot|times|simeq|approx)|(?:leq|geq|neq|gg|ll|equiv|sim|propto|rightarrow|leftarrow|Rightarrow|Leftarrow|leftrightarrow|to|top|mapsto|cap|cup|in|sum|prod|exp|ln|log|det|dots|vdots|ddots|pm|mp|int|iint|iiint|oint))([A-Za-z])" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)` `!p snip.rv = match.group(2)`
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|(?:parallel|perp|partial|nabla|hbar|ell|infty|oplus|ominus|otimes|oslash|square|star|dagger|vee|wedge|subseteq|subset|supseteq|supset|emptyset|exists|nexists|forall|implies|impliedby|iff|setminus|neg|lor|land|bigcup|bigcap|cdot|times|simeq|approx)) sr" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`^{2}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|(?:parallel|perp|partial|nabla|hbar|ell|infty|oplus|ominus|otimes|oslash|square|star|dagger|vee|wedge|subseteq|subset|supseteq|supset|emptyset|exists|nexists|forall|implies|impliedby|iff|setminus|neg|lor|land|bigcup|bigcap|cdot|times|simeq|approx)) cb" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`^{3}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)|(?:parallel|perp|partial|nabla|hbar|ell|infty|oplus|ominus|otimes|oslash|square|star|dagger|vee|wedge|subseteq|subset|supseteq|supset|emptyset|exists|nexists|forall|implies|impliedby|iff|setminus|neg|lor|land|bigcup|bigcap|cdot|times|simeq|approx)) rd" "Math regex" rA
+`!p snip.rv = chr(92) + match.group(1)`^{$1}$0
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)) hat" "Math regex" rA
+\hat{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)) dot" "Math regex" rA
+\dot{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)) bar" "Math regex" rA
+\bar{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)) vec" "Math regex" rA
+\vec{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)) tilde" "Math regex" rA
+\tilde{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\((?:alpha|beta|gamma|Gamma|delta|Delta|epsilon|varepsilon|zeta|eta|theta|vartheta|Theta|iota|kappa|lambda|Lambda|mu|nu|xi|omicron|pi|rho|varrho|sigma|Sigma|tau|upsilon|Upsilon|phi|varphi|Phi|chi|psi|omega|Omega)) und" "Math regex" rA
+\underline{`!p snip.rv = chr(92) + match.group(1)`}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet par "par" i
+\frac{ \partial ${1:y} }{ \partial ${2:x} } $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "pa([A-Za-z])([A-Za-z])" "Math regex" r
+\frac{ \partial `!p snip.rv = match.group(1)` }{ \partial `!p snip.rv = match.group(2)` } 
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ddt "ddt" iA
+\frac{d}{dt} 
+endsnippet
+
+priority -1
+context "in_math() and outside_command(snip)"
+snippet "(^|[^\\A-Za-z])int" "Math regex" rA
+`!p snip.rv = match.group(1)`\int
+endsnippet
+
+priority 0
+context "in_math()"
+snippet \int "\int" i
+\int $1 \, d${2:x} $0
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet dint "dint" iA
+\int_{${1:0}}^{${2:1}} $3 \, d${4:x} $0
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet oint "oint" iA
+\oint
+endsnippet
+
+priority 4
+context "in_math() and outside_command(snip)"
+snippet iint "iint" i
+\iint
+endsnippet
+
+priority 5
+context "in_math() and outside_command(snip)"
+snippet iiint "iiint" i
+\iiint
+endsnippet
+
+priority 100
+context "in_math() and outside_command(snip)"
+snippet oinf "oinf" iA
+\int_{0}^{\infty} $1 \, d${2:x} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet infi "infi" iA
+\int_{-\infty}^{\infty} $1 \, d${2:x} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "(^|[^\\])(arcsin|sin|arccos|cos|arctan|tan|csc|sec|cot)" "Add backslash before trig funcs" rA
+`!p snip.rv = match.group(1)``!p snip.rv = chr(92) + match.group(2)`
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\(arcsin|sin|arccos|cos|arctan|tan|csc|sec|cot)([A-Za-gi-z])" "Add space after trig funcs. Skips letter h to allow sinh, cosh, etc." rA
+`!p snip.rv = chr(92) + match.group(1)` `!p snip.rv = match.group(2)`
+endsnippet
+
+priority 0
+context "in_math()"
+snippet "\\(sinh|cosh|tanh|coth)([A-Za-z])" "Add space after hyperbolic trig funcs" rA
+`!p snip.rv = chr(92) + match.group(1)` `!p snip.rv = match.group(2)`
+endsnippet
+
+priority 1
+context "in_math() and outside_command(snip)"
+snippet "(arccsc|arcsec|arccot)" "Inverse trig functions, Are not built-in MathJax functions" rA
+\operatorname{`!p snip.rv = match.group(1)`}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet U "U" i
+\underbrace{ ${VISUAL} }_{ $1 }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet O "O" i
+\overbrace{ ${VISUAL} }^{ $1 }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet B "B" i
+\underset{ $1 }{ ${VISUAL} }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet C "C" i
+\cancel{ ${VISUAL} }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet K "K" i
+\cancelto{ $1 }{ ${VISUAL} }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet S "S" i
+\sqrt{ ${VISUAL} }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet kbt "kbt" iA
+k_{B}T
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet msun "msun" iA
+M_{\odot}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet dag "dag" iA
+^{\dagger}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet o+ "o+" iA
+\oplus 
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ox "ox" iA
+\otimes 
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet bra "bra" iA
+\bra{$1} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ket "ket" iA
+\ket{$1} $0
+endsnippet
+
+priority 0
+context "in_math() and not inline_math() and outside_command(snip)"
+snippet mket "mket" iA
+\begin{bmatrix}
+{$1}\\
+{$2}
+\end{bmatrix} $0
+endsnippet
+
+priority 0
+context "inline_math() and outside_command(snip)"
+snippet mket "mket" iA
+\begin{bmatrix} {$1}\\{$2} \end{bmatrix} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet brk "brk" iA
+\braket{ $1 | $2 } $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet outer "outer" iA
+\ket{${1:\psi}} \bra{${1:\psi}} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet pu "pu" iA
+\pu{ $1 }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet cee "cee" iA
+\ce{ $1 }
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet he4 "he4" iA
+{}^{4}_{2}He 
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet he3 "he3" iA
+{}^{3}_{2}He 
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet iso "iso" iA
+{}^{${1:4}}_{${2:2}}${3:He}
+endsnippet
+
+priority 0
+context "in_math() and not inline_math() and outside_command(snip)"
+snippet "([pbBvV]mat)" "Matrix environments with new lines" rA
+\begin{`!p snip.rv = match.group(1)`rix}
+$1
+\end{`!p snip.rv = match.group(1)`rix}
+endsnippet
+
+priority 0
+context "in_text() and outside_command(snip)"
+snippet align "Alignment outside math" bA
+\begin{align}
+	$1
+\end{align}
+$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "matrix|cases" "Math environment" rA
+\begin{`!p snip.rv = match.group(0)`}
+	$1
+\end{`!p snip.rv = match.group(0)`}$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet array "Array with column specification" iA
+\begin{array}{${1:cc}}
+	$2
+\end{array}$0
+endsnippet
+
+priority 0
+context "inline_math() and outside_command(snip)"
+snippet "([pbBvV]mat)" "Math regex" rA
+\begin{`!p snip.rv = match.group(1)`rix}$1\end{`!p snip.rv = match.group(1)`rix}
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet avg "avg" iA
+\langle $1 \rangle $0
+endsnippet
+
+priority 1
+context "in_math() and outside_command(snip)"
+snippet norm "norm" iA
+\lvert $1 \rvert $0
+endsnippet
+
+priority 1
+context "in_math() and outside_command(snip)"
+snippet Norm "Norm" iA
+\lVert $1 \rVert $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet ceil "ceil" iA
+\lceil $1 \rceil $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet floor "floor" iA
+\lfloor $1 \rfloor $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet mod "mod" iA
+|$1|$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet lr( "lr(" iA
+\left( $1 \right) $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet lr{ "lr{" iA
+\left\{ $1 \right\} $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet lr[ "lr[" iA
+\left[ $1 \right] $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet lr| "lr|" iA
+\left| $1 \right| $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet lra "lra" iA
+\left< $1 \right> $0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet tayl "Taylor expansion" iA
+${1:f}(${2:x} + ${3:h}) = ${1:f}(${2:x}) + ${1:f}'(${2:x})${3:h} + ${1:f}''(${2:x}) \frac{${3:h}^{2}}{2!} + \dots$0
+endsnippet
+
+priority 0
+context "in_math() and outside_command(snip)"
+snippet "iden([1-9])" "N x N identity matrix" rA
+`!p snip.rv = identity_matrix(int(match.group(1)))`
+endsnippet

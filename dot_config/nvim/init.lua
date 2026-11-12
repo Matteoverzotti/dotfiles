@@ -1,6 +1,12 @@
 require 'core.options'
 require 'core.keymaps'
 
+-- Isolated Python provider used by UltiSnips.
+local python_host = vim.fn.stdpath('data') .. '/python/bin/python'
+if vim.fn.executable(python_host) == 1 then
+    vim.g.python3_host_prog = python_host
+end
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
