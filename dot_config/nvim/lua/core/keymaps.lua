@@ -81,7 +81,7 @@ vim.keymap.set('n', '<F8>', function()
   if vim.bo.filetype == "cpp" then
     vim.cmd("w")
     vim.fn.mkdir(vim.fn.expand("%:p:h") .. "/bin", "p")
-    run_and_exit_on_keypress("clang++ " .. vim.fn.expand("%:p") ..
+    run_and_exit_on_keypress("g++ " .. vim.fn.expand("%:p") ..
       " -O2 -DBLAT -std=c++20 -Wall -fsanitize=address,undefined,signed-integer-overflow -o "
       .. vim.fn.expand("%:p:h") .. "/bin/" .. vim.fn.expand("%:t:r"))
   elseif vim.bo.filetype == "c" then

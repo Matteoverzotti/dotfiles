@@ -44,6 +44,11 @@ return {
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('treesitter-start', { clear = true }),
         callback = function(event)
+          -- VimTeX concealment requires its own syntax highlighting.
+          if vim.bo[event.buf].filetype == 'tex' then
+            return
+          end
+
           local lang = vim.treesitter.language.get_lang(vim.bo[event.buf].filetype)
           if not lang then
             return
